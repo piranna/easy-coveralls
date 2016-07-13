@@ -1,0 +1,35 @@
+{
+  "name": "easy-coveralls",
+  "version": "0.0.0",
+  "description": "Easily configure a npm module to generate and upload tests coverage to Coveralls.io",
+  "bin": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/piranna/easy-coveralls.git"
+  },
+  "keywords": [
+    "test",
+    "tests",
+    "tests",
+    "coverage",
+    "tests",
+    "coverture",
+    "coverage",
+    "coverture"
+  ],
+  "author": "Jesús Leganés-Combarro 'piranna' <piranna@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/piranna/easy-coveralls/issues"
+  },
+  "homepage": "https://github.com/piranna/easy-coveralls#readme",
+  "dependencies": {
+    "coveralls": "^2.11.11",
+    "fs-extra": "^0.30.0",
+    "jscoverage": "github:piranna/jscoverage",
+    "mocha-lcov-reporter": "^1.2.0"
+  }
+}
