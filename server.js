@@ -10,9 +10,14 @@ const PKG = require(resolve('package.json'))
 const script = process.argv[2] || 'test'
 
 
-easyCoveralls(PKG, script, function(error, code)
+easyCoveralls(PKG, script, function(error)
 {
-  if(error) console.trace(error)
+  if(error)
+  {
+    console.trace(error)
 
-  if(code) process.exit(code)
+    if(typeof code !== 'number') code = 1
+
+    process.exit(code)
+  }
 })

@@ -1,33 +1,29 @@
-const child_process = require('child_process')
-const resolve       = require('path').resolve
+const cp      = require('child_process')
+const resolve = require('path').resolve
 
+const coveralls  = require('coveralls').handleInput
 const fs         = require('fs-extra')
 const jscoverage = require('jscoverage')
 
 
-function onexit(cmd, code, signal)
+/**
+ * @param {Object} pkg
+ * @param {string} [scriptName='test']
+ * @param {Function} callback
+ */
+function easyCoveralls(pkg, scriptName, callback)
 {
-  if(code)   console.error(cmd,'exited with code:',code)
-  if(signal) console.error(cmd,'exited with signal:',signal)
-}
-
-function spawn()
-{
-  var cmd = arguments[0]
-
-  var cp = child_process.spawn.apply(child_process, arguments)
-  .on('error', console.error.bind(console, cmd,'has errored:'))
-  .on('exit', onexit.bind(null, cmd))
-
-  cp.stderr.pipe(process.stderr)
-
-  return cp
-}
+  if(scriptName instanceof Function)
+  {
+    callback   = scriptName
+    scriptName = 'test'
+  }
 
 
-function easyCoveralls(pkg, script, callback)
-{
-  fs.stat(resolve(pkg.main || 'index.js'), function(err, stats)
+  var LIB = resolve(pkg.main || 'index.js')
+
+
+  fs.stat(LIB, function(err, stats)
   {
     if(err) return callback(err)
 
@@ -35,31 +31,45 @@ function easyCoveralls(pkg, script, callback)
     {
       var coverage = jscoverage.processDir
 
-      var LIB  = 'lib'
-      var COV  = 'lib_cov'
-      var ORIG = 'lib_orig'
+      var COV  = LIB+'_cov'
+      var ORIG = LIB+'_orig'
     }
     else
     {
       var coverage = jscoverage.processFile
 
-      var LIB  = 'index.js'
-      var COV  = 'index_cov.js'
-      var ORIG = 'index_orig.js'
+      var COV  = LIB+'_cov.js'
+      var ORIG = LIB+'_orig.js'
     }
 
-    function cleanUp(code)
+    /**
+     * Restore original not-instrumented library
+     */
+    function restoreLib(err1)
     {
-      // Restore original not-instrumented library
-      fs.remove(LIB, function(error)
+      fs.move(ORIG, LIB, {clobber: true}, function(err2)
       {
-        if(error) console.trace(error)
-
-        fs.move(ORIG, LIB, {clobber: true}, function(error)
-        {
-          callback(error, code)
-        })
+        callback(err1 || err2)
       })
+    }
+
+    function execResult(error, stdout, stderr)
+    {
+      if(error)
+      {
+        console.error(error)
+
+        const code   = error.code
+        const signal = error.signal
+
+        if(code)   console.error('test exited with code:'  , code)
+        if(signal) console.error('test exited with signal:', signal)
+
+        return restoreLib(code || signal)
+      }
+
+      // Create and upload new coverage data
+      coveralls(stdout, restoreLib)
     }
 
     // Generate instrumented library
@@ -75,24 +85,10 @@ function easyCoveralls(pkg, script, callback)
         if(error) console.trace(error)
 
         // Exec test and fetch coverage data
-        child_process.execFile(pkg.scripts[script], function(error)
-        {
-          if(error)
-          {
-            console.trace(error)
-            return cleanUp(1)
-          }
+        const command = pkg.scripts[scriptName]
+        if(command !== 'mocha') return cp.exec(command, execResult)
 
-          // Create and upload new coverage data
-          const LCOV_FILE='reports/'+pkg.name+'.lcov'
-
-          fs.createReadStream(LCOV_FILE).pipe(spawn('coveralls').stdin)
-        })
-        .on('exit', function(code, signal)
-        {
-          onexit('test', code, signal)
-          cleanUp(code)
-        })
+        cp.execFile(command, ['-R', 'mocha-lcov-reporter'], execResult)
       })
     })
   })

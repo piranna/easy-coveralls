@@ -4,7 +4,7 @@
   "description": "Easily configure a npm module to generate and upload tests coverage to Coveralls.io",
   "bin": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -31,5 +31,8 @@
     "fs-extra": "^0.30.0",
     "jscoverage": "github:piranna/jscoverage",
     "mocha-lcov-reporter": "^1.2.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.5.3"
   }
 }
