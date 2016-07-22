@@ -12,7 +12,7 @@ And of course, it's executed against itself! :-D
 ## How to use `easy-coveralls` in 5 steps
 
 1. be sure your tests are passing on your CI server and that you has enabled
-   your project on `Coveralls.io`.
+   your project on [Coveralls.io](https://coveralls.io/).
 
 2. add the `easy-coveralls` dependency to your project:
    ```sh
@@ -29,20 +29,21 @@ And of course, it's executed against itself! :-D
    }
    ```
 
-4. configure your CI server to exec `easy-coveralls`. For `TravisCI` add to
-   your project `.travis.yml` file:
-   ```yaml
-   after_script:
-   - npm run coveralls
-   ```
-   For `SemaphoreCI` just set `npm run coveralls` as a Post-Thread script.
+4. configure your CI server to exec `easy-coveralls`.
+   * For `TravisCI` add to your project `.travis.yml` file:
+      ```yaml
+      after_script:
+      - npm run coveralls
+      ```
+   * For `SemaphoreCI` just set `npm run coveralls` as a Post-Thread script.
 
-5. Ta-Da! :-D
+5. there's no fifth step. Ta-Da! :-D
 
 ## How it works
 
-First create an instrumented version of your module or library and swap it with
-the original one. Later exec the tests as usual generating a `lcov` compatible
-report in the case your tests works just by executing the `mocha` command and
-update the coverture statistics to `Coveralls.io`, and finally delete the
-instrumented library and restore your original one. No less, no more.
+`easy-coveralls` internally do several tasks. First it creates an instrumented
+version of your module or library and swap it with the original one. Later it
+exec the tests as usual generating a `lcov` compatible report in the case your
+tests works just by executing the `mocha` command and update the coverture
+statistics to `Coveralls.io`, and finally it delete the instrumented library
+and restore your original one. No less, no more.
