@@ -31,10 +31,10 @@ And of course, it's executed against itself! :-D
 
 4. configure your CI server to exec `easy-coveralls`.
    * For `TravisCI` add to your project `.travis.yml` file:
-      ```yaml
-      after_script:
-      - npm run coveralls
-      ```
+   ```yaml
+   after_script:
+   - npm run coveralls
+   ```
    * For `SemaphoreCI` just set `npm run coveralls` as a Post-Thread script.
 
 5. there's no fifth step. Ta-Da! :-D
