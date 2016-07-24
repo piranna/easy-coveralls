@@ -73,22 +73,25 @@ function easyCoveralls(pkg, scriptName, callback)
     }
 
     // Generate instrumented library
-    coverage(LIB, COV)
-
-    // Swap original library for instrumented one
-    fs.move(LIB, ORIG, {clobber: true}, function(error)
+    coverage(LIB, COV, function(error)
     {
-      if(error) console.trace(error)
+      if(error) return restoreLib(error)
 
-      fs.move(COV, LIB, function(error)
+      // Swap original library for instrumented one
+      fs.move(LIB, ORIG, {clobber: true}, function(error)
       {
         if(error) console.trace(error)
 
-        // Exec test and fetch coverage data
-        const command = pkg.scripts[scriptName]
-        if(command !== 'mocha') return cp.exec(command, execResult)
+        fs.move(COV, LIB, function(error)
+        {
+          if(error) console.trace(error)
 
-        cp.execFile(command, ['-R', 'mocha-lcov-reporter'], execResult)
+          // Exec test and fetch coverage data
+          const command = pkg.scripts[scriptName]
+          if(command !== 'mocha') return cp.exec(command, execResult)
+
+          cp.execFile(command, ['-R', 'mocha-lcov-reporter'], execResult)
+        })
       })
     })
   })
