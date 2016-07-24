@@ -55,21 +55,19 @@ function easyCoveralls(pkg, scriptName, callback)
 
     function execResult(error, stdout, stderr)
     {
-      if(error)
-      {
-        console.error(error)
+      // If there has not been an error, create and upload new coverage data
+      if(!error) return coveralls(stdout, restoreLib)
 
-        const code   = error.code
-        const signal = error.signal
+      // There has been an error, notify it
+      console.error(error)
 
-        if(code)   console.error('test exited with code:'  , code)
-        if(signal) console.error('test exited with signal:', signal)
+      const code   = error.code
+      const signal = error.signal
 
-        return restoreLib(code || signal)
-      }
+      if(code)   console.error('test exited with code:'  , code)
+      if(signal) console.error('test exited with signal:', signal)
 
-      // Create and upload new coverage data
-      coveralls(stdout, restoreLib)
+      restoreLib(code || signal)
     }
 
     // Generate instrumented library
