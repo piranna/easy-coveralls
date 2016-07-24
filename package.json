@@ -1,6 +1,6 @@
 {
   "name": "easy-coveralls",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Easily configure a npm module to generate and upload tests coverage to Coveralls.io",
   "bin": "server.js",
   "scripts": {
