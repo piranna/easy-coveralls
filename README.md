@@ -39,6 +39,35 @@ And of course, it's executed against itself! :-D
 
 5. there's no fifth step. Ta-Da! :-D
 
+## Configuration options
+
+Easy-coveralls will by default use the `main` entry in `package.json`or `index.js` in the project root to do coverage on. You can override this default by calling `easy-coveralls` with the `--main` or `-m` option:
+
+`--main src/index.js` or `-m src/index.js`
+
+The script entry used to detemine the command is by default `test`. You can override this by setting the `--script` or `-s` option.
+
+`-s test:mocha`
+
+The command executed is by default the `script['test']` entry of `package.json`. You can override this by setting the `--command` or `-c` option
+
+`-c "junit test"`
+
+Full config example:
+
+`easy-coveralls -m src/index.js -s test:mocha`
+
+You may even run coverage stats for different testing engines:
+
+  ```json
+   {
+     "scripts": {
+       "coveralls:mocha": "easy-coveralls -m src/index.js -s test:mocha",
+       "coveralls:karma": "easy-coveralls -m src/index.js -s test:mocha"
+     }
+   }
+  ```
+
 ## How it works
 
 `easy-coveralls` internally do several tasks. First it creates an instrumented
