@@ -7,10 +7,17 @@ const easyCoveralls = require('.')
 
 const PKG = require(resolve('package.json'))
 
-const script = process.argv[2] || 'test'
+const commandLineArgs = require('command-line-args')
 
+const optionDefinitions = [
+  { name: 'main', alias: 'm', type: String },
+  { name: 'command', alias: 'c', type: String },
+  { name: 'script', alias: 'v', type: String, defaultOption: 'test' }
+]
 
-easyCoveralls(PKG, script, function(error)
+const options = commandLineArgs(optionDefinitions)
+
+easyCoveralls(PKG, options, function(error)
 {
   if(error)
   {

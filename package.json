@@ -1,6 +1,6 @@
 {
   "name": "easy-coveralls",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Easily configure a npm module to generate and upload tests coverage to Coveralls.io",
   "bin": "server.js",
   "scripts": {
@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/piranna/easy-coveralls#readme",
   "dependencies": {
+    "command-line-args": "^3.0.2",
     "coveralls": "^2.11.11",
     "fs-extra": "^0.30.0",
     "jscoverage": "github:piranna/jscoverage",

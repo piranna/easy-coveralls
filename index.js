@@ -11,8 +11,10 @@ const jscoverage = require('jscoverage')
  * @param {string} [scriptName='test']
  * @param {Function} callback
  */
-function easyCoveralls(pkg, scriptName, callback)
+function easyCoveralls(pkg, options, callback)
 {
+  let scriptName = options.script
+
   if(scriptName instanceof Function)
   {
     callback   = scriptName
@@ -20,7 +22,8 @@ function easyCoveralls(pkg, scriptName, callback)
   }
 
 
-  var LIB = resolve(pkg.main || 'index.js')
+  const LIB = resolve(options.main || pkg.main || 'index.js')
+  const command = options.command || pkg.scripts[scriptName]
 
 
   fs.stat(LIB, function(err, stats)
@@ -85,7 +88,6 @@ function easyCoveralls(pkg, scriptName, callback)
           if(error) console.trace(error)
 
           // Exec test and fetch coverage data
-          const command = pkg.scripts[scriptName]
           if(command !== 'mocha') return cp.exec(command, execResult)
 
           cp.execFile(command, ['-R', 'mocha-lcov-reporter'], execResult)
