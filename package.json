@@ -4,7 +4,9 @@
   "description": "Easily configure a npm module to generate and upload tests coverage to Coveralls.io",
   "bin": "server.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -30,9 +32,11 @@
     "coveralls": "^2.11.11",
     "fs-extra": "^0.30.0",
     "jscoverage": "github:piranna/jscoverage",
-    "mocha-lcov-reporter": "^1.2.0"
+    "mocha-lcov-reporter": "^1.2.0",
+    "snyk": "^1.286.1"
   },
   "devDependencies": {
     "mocha": "^2.5.3"
-  }
+  },
+  "snyk": true
 }
