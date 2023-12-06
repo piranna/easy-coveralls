@@ -28,7 +28,7 @@
   "homepage": "https://github.com/piranna/easy-coveralls#readme",
   "dependencies": {
     "coveralls": "^2.11.11",
-    "fs-extra": "^0.30.0",
+    "fs-extra": "^1.0.0",
     "jscoverage": "github:piranna/jscoverage",
     "mocha-lcov-reporter": "^1.2.0"
   },
